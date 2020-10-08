@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1">
+
+    <title>{% block title %} {{ title }} {% endblock %}</title>
+
+    {% load static %}
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,800italic,700italic,600italic,400italic,300italic,800,700,600'
+		  rel='stylesheet' type='text/css'>
+
+	<link rel="icon" href="{% static 'img/small_logo.png' %}" type="image/png">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<!--<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css">-->
+	<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/responsive.css' %}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/magnific-popup.css' %}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/animate.css' %}" rel="stylesheet" type="text/css">
+
+
+	<script type="text/javascript" src="{% static 'js/jquery.1.8.3.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery-scrolltofixed.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery.isotope.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/wow.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/classie.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/magnific-popup.js' %}"></script>
+	<script src="{% static 'contactform/contactform.js' %}"></script>
+</head>
+
+<body>
+
+	{% block header %}
+
+		<header class="header" id="header">
+			<!--header-start-->
+			<div class="main-header">
+				<div class="row">
+					<div class="col">
+						<a href="{% url 'home' %}">
+							<img width = "100" height = "100" src="{% static 'img/logo2.png' %}" alt="" align="left"
+								 style="margin-right: 25px;">
+						</a>
+						<h1 align="left">SniperFish.ru</h1>
+						<p align="right">Нацелены на хороший улов!</p>
+					</div>
+					<div class="col">
+					</div>
+					<div class="col main-nav-header">
+						<ul>
+							<li>
+								{% if user.is_anonymous %}
+								<a href="{% url 'account_login' %}">
+									<i class="fa fa-user" style="margin-right: 5px;" aria-hidden="true"></i>
+									Вход
+								</a>
+								{% else %}
+								<a href="{% url 'personal' %}">
+									<i class="fa fa-user" style="margin-right: 5px;" aria-hidden="true"></i>
+									{{ user }}
+								</a>
+								{% endif %}
+							</li>
+							<li>
+								<a href="{% url 'cart' %}">
+									<i class="fa fa-shopping-basket" style="margin-right: 5px;" aria-hidden="true"></i>
+									Корзина
+									{% if cart.products.count %}
+									<span class="badge_cart" style="margin-left: 5px;">{{ cart.products.count }}</span>
+									{% endif %}
+								</a>
+							</li>
+							<li>
+								<input type="text" placeholder="Поиск" width="10" aria-label="Search"
+									   style="margin-left: 30px;">
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</header>
+
+	{% endblock %}
+
+    <nav class="main-nav-outer" id="test">
+        <div class="container">
+            <ul class="main-nav">
+                <li><a href="{% url 'home' %}">Главная</a></li>
+                <li><a href="{% url 'news' %}">Новости</a></li>
+                <li><a href="{% url 'promotions' %}">Акции</a></li>
+                <li><a href="{% url 'pay_ship' %}">Оплата и доставка</a></li>
+                <li><a href="{% url 'help' %}">Помощь</a></li>
+                <li><a href="{% url 'about' %}">Контакты</a></li>
+            </ul>
+        </div>
+    </nav>
+
+	<div class="sfblock">
+		<div class="row">
+			<div class="col-lg-2 mt-2">
+				<div class="main-nav-left"><a href="{% url 'categories' %}">Каталог</a></div>
+				<nav class="main-nav-outer">
+				  {% for item in category %}
+				  <a href="/categories/{{ item.slug }}" class="list-group-item">{{ item.name }}</a>
+				  {% endfor %}
+				</nav>
+			</div>
+			<div class="col-lg-9" style="background:#fafafa;">
+
+				{% if messages %}
+					{% for message in messages %}
+
+						<div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+						  <strong>{{ message }}</strong>
+						  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						  </button>
+						</div>
+
+				  	{% endfor %}
+				{% endif %}
+
+				{% block content %}{% endblock content %}
+			</div>
+		</div>
+	</div>
+	{% block endcontent %}{% endblock endcontent %}
+
+    {% block footer %}
+		<footer class="footer  mt-4">
+			<div class="container">
+				<span class="copyright">&copy; GDeveloping 2020. All Rights Reserved</span>
+			</div>
+		</footer>
+	{% endblock footer %}
+
+    <script type="text/javascript">
+		$(document).ready(function(e) {
+
+			$('#test').scrollToFixed();
+			$('.res-nav_click').click(function() {
+				$('.main-nav').slideToggle();
+				return false
+
+			});
+
+      $('.Portfolio-box').magnificPopup({
+        delegate: 'a',
+        type: 'image'
+      });
+
+		});
+	</script>
+
+	<script>
+		wow = new WOW({
+			animateClass: 'animated',
+			offset: 100
+		});
+		wow.init();
+	</script>
+
+	<script type="text/javascript">
+		$(window).load(function() {
+
+			$('.main-nav li a, .servicelink').bind('click', function(event) {
+				var $anchor = $(this);
+
+				$('html, body').stop().animate({
+					scrollTop: $($anchor.attr('href')).offset().top - 102
+				}, 1500, 'easeInOutExpo');
+				/*
+				if you don't want to use the easing effects:
+				$('html, body').stop().animate({
+					scrollTop: $($anchor.attr('href')).offset().top
+				}, 1000);
+				*/
+				if ($(window).width() < 768) {
+					$('.main-nav').hide();
+				}
+				event.preventDefault();
+			});
+		})
+	</script>
+
+	<script type="text/javascript">
+		$(window).load(function() {
+
+
+			var $container = $('.portfolioContainer'),
+				$body = $('body'),
+				colW = 375,
+				columns = null;
+
+
+			$container.isotope({
+				// disable window resizing
+				resizable: true,
+				masonry: {
+					columnWidth: colW
+				}
+			});
+
+			$(window).smartresize(function() {
+				// check if columns has changed
+				var currentColumns = Math.floor(($body.width() - 30) / colW);
+				if (currentColumns !== columns) {
+					// set new column count
+					columns = currentColumns;
+					// apply width to container manually, then trigger relayout
+					$container.width(columns * colW)
+						.isotope('reLayout');
+				}
+
+			}).smartresize(); // trigger resize to set container width
+			$('.portfolioFilter a').click(function() {
+				$('.portfolioFilter .current').removeClass('current');
+				$(this).addClass('current');
+
+				var selector = $(this).attr('data-filter');
+				$container.isotope({
+
+					filter: selector,
+				});
+				return false;
+			});
+
+		});
+	</script>
+</body>
+</html>

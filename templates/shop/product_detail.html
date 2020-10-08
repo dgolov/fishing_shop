@@ -1,0 +1,54 @@
+{% extends 'shop\base.html' %}
+{% load specifications %}
+
+{% block title %}
+    {{ product.name }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <nav aria-label="breadcrumb" class="pt-4">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'categories' %}">Каталог</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'categories' %}/{{ product.category.slug }}">
+                {{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+          </ol>
+        </nav>
+
+        <div class="row">
+            <div class="col-md-4">
+                <br>
+                <img src="{{ product.image.url }}" class="img-fluid">
+            </div>
+            <div class="col-md-8">
+                <h1>{{ product.name }}</h1>
+                <br>
+                <h5>Цена: {{ product.price }} руб</h5><br>
+                <p>
+                    <a href="{% url 'add_to_cart' ct_model=ct_model slug=product.slug %}">
+                        <button class="btn btn-danger">В корзину</button>
+                    </a>
+                </p>
+                <br>
+                <h3>Описание</h3>
+                <p align="justify">{{ product.description }}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-8">
+                <h3>Характеристики</h3>
+
+                {{ product|product_spec }}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'shop\base.html' %}
+
+{% block content %}
+<h3 class="text-center mt-5 mb-5">Ваша корзина {% if not cart.products.count %} пуста {% endif %}</h3>
+
+<div class="container">
+
+    {% if cart.products.count %}
+
+    <div class="row">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Наименование</th>
+              <th scope="col">Изображение</th>
+              <th scope="col">Цена</th>
+              <th scope="col">Колличество</th>
+              <th scope="col">Общая цена</th>
+              <th scope="col">Действие</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for item in cart.products.all %}
+            <tr>
+              <th scope="row">{{ item.content_object.name }}</th>
+              <td class="w-25">
+                <img width = "100" height = "32" src="{{ item.content_object.image.url }}" class="img-fluid">
+              </td>
+              <td>{{ item.content_object.price }} руб</td>
+              <td>
+                <form action="{% url 'change_qty' ct_model=item.content_object.get_model_name slug=item.content_object.slug %}" method="POST">
+                  {% csrf_token %}
+                  <input type="number" class="form-control" name="qty" style="width: 94px;" min="1" value="{{ item.qty }}">
+                  <br>
+                  <input type="submit" class="btn btn-success" value="Изменить">
+                </form>
+              </td>
+              <td>{{ item.final_price }} руб</td>
+              <td>
+                <a href="{% url 'remove_from_cart' ct_model=item.content_object.get_model_name slug=item.content_object.slug %}">
+                  <!--<button class="btn btn-danger">Удалить из корзны</button>-->
+                  <i class="fa fa-trash" style="color: #d9534f; font-size: 32px;" aria-hidden="true"></i>
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="2"></td>
+            <td>Итого:</td>
+            <td>{{ cart.total_product }}</td>
+            <td><strong>{{ cart.final_price }} руб</strong></td>
+            <td>
+              <a href="{% url 'checkout' %}">
+                <button class="btn btn-success">Оформить заказ</button>
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock content %}

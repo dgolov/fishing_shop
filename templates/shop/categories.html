@@ -1,0 +1,37 @@
+{% extends 'shop\base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <section class="main-section paddind" id="Portfolio">
+		<!--main-section-start-->
+		<div class="container">
+			<h2>Магазин</h2>
+			<h6>Выберете категорию товара.</h6>
+			<div class="portfolioFilter">
+				<ul class="Portfolio-nav wow fadeIn delay-02s">
+					<li><a href="#" data-filter="*" class="current">Все</a></li>
+					{% if parent_category %}
+					{% for el in parent_category %}
+						<li><a href="#" data-filter=".{{ el.name }}">{{ el.name }}</a></li>
+					{% endfor %}
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+
+		<div class="portfolioContainer wow fadeInUp delay-04s">
+			{% if category %}
+			{% for el in category %}
+			<div class=" Category-box {{ el.category }}">
+				<a href="categories/{{ el.slug }}"><img src="{{ el.image.url }}" alt=""></a>
+				<br>
+				<h3>{{ el.name }}</h3>
+			</div>
+			{% endfor %}
+			{% endif %}
+		</div>
+	</section>
+
+{% endblock content %}
