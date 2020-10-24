@@ -80,6 +80,10 @@ class CartProduct(models.Model):
     qty = models.PositiveIntegerField(default=1)
     final_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Итоговая цена')
 
+    class Meta:
+        verbose_name = '- Товары в корзинах -'
+        verbose_name_plural = '- Товары в корзинах -'
+
     def __str__(self):
         return "Товар {} (для корзины)".format(self.content_object.name)
 
@@ -102,6 +106,10 @@ class Cart(models.Model):
     in_order = models.BooleanField(default=False)
     for_anonymous_user = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = '- Корзина -'
+        verbose_name_plural = '- Корзины -'
+
     def __str__(self):
         return str(self.id)
 
@@ -115,6 +123,10 @@ class Customer(models.Model):
     phone = models.CharField(max_length=20, verbose_name='Номер телефона', null=True, blank=True)
     address = models.CharField(max_length=255, verbose_name='Адрес', null=True, blank=True)
     orders = models.ManyToManyField('Order', verbose_name='Заказы покупателя', related_name='related_customer')
+
+    class Meta:
+        verbose_name = '- Покупатель -'
+        verbose_name_plural = '- Покупатели -'
 
     def __str__(self):
         return 'Покупатель: {} {}'.format(self.user.first_name, self.user.last_name)
@@ -166,6 +178,10 @@ class Order(models.Model):
     order_date = models.DateField(verbose_name='Дата получения заказа', default=timezone.now)
     cart = models.ForeignKey(Cart, verbose_name='Корзина', on_delete=models.CASCADE, null=True, blank=True)
 
+    class Meta:
+        verbose_name = '- Заказ -'
+        verbose_name_plural = '- Заказы -'
+
     def __str__(self):
         return str(self.id)
 
@@ -182,8 +198,8 @@ class ParentCategory(models.Model):
 
     class Meta:
         ordering = ('name',)
-        verbose_name = 'Категория'
-        verbose_name_plural = 'Категории'
+        verbose_name = '-- Категория --'
+        verbose_name_plural = '-- Категории --'
 
     def __str__(self):
         return self.name
@@ -210,8 +226,8 @@ class Category(models.Model):
 
     class Meta:
         ordering = ('name',)
-        verbose_name = 'Подкатегория'
-        verbose_name_plural = 'Подкатегории'
+        verbose_name = '-- Подкатегория --'
+        verbose_name_plural = '-- Подкатегории --'
 
     def __str__(self):
         return self.name
